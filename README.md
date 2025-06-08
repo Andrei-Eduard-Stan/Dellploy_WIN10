@@ -376,6 +376,3 @@ goto:eof
 - Offline Intune Enrollment
 - Dynamic hostname generation
 
-> 💬 If you're reading this in Obsidian:  
-> You're probably Andrei. You built this.  
-> And yeah, it *still works*.

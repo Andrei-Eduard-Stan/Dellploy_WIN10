@@ -272,7 +272,7 @@ Place the autounattend.xml to `N:\`.
       <AutoLogon>
         <Username>Admin</Username>
         <Password>
-          <Value>Cowg1rl</Value>
+          <Value>RED@CTED</Value>
           <PlainText>true</PlainText>
         </Password>
         <Enabled>true</Enabled>

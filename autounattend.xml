@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+
+  <!-- ===================== PASS: windowsPE ===================== -->
+  <settings pass="windowsPE">
+    
+    <!-- Regional Settings: Language, Locale, Input -->
+    <component name="Microsoft-Windows-International-Core-WinPE" 
+               processorArchitecture="amd64" 
+               publicKeyToken="31bf3856ad364e35" 
+               language="neutral" 
+               versionScope="nonSxS" 
+               xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      <SetupUILanguage>
+        <UILanguage>en-GB</UILanguage>
+      </SetupUILanguage>
+      <InputLocale>en-GB</InputLocale>
+      <SystemLocale>en-GB</SystemLocale>
+      <UILanguage>en-GB</UILanguage>
+      <UILanguageFallback>en-GB</UILanguageFallback>
+      <UserLocale>en-GB</UserLocale>
+    </component>
+
+    <!-- Disk Partitioning and Formatting -->
+    <component name="Microsoft-Windows-Setup" 
+               processorArchitecture="amd64" 
+               publicKeyToken="31bf3856ad364e35" 
+               language="neutral" 
+               versionScope="nonSxS" 
+               xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      <DiskConfiguration>
+        <Disk wcm:action="add">
+          <DiskID>0</DiskID>
+          <WillWipeDisk>true</WillWipeDisk> <!-- Deletes all partitions on disk 0 -->
+
+          <CreatePartitions>
+            <!-- EFI System Partition -->
+            <CreatePartition wcm:action="add">
+              <Order>1</Order>
+              <Type>EFI</Type>
+              <Size>300</Size>
+            </CreatePartition>
+            <!-- Microsoft Reserved Partition -->
+            <CreatePartition wcm:action="add">
+              <Order>2</Order>
+              <Type>MSR</Type>
+              <Size>128</Size>
+            </CreatePartition>
+            <!-- OS Partition (Primary, takes remaining space) -->
+            <CreatePartition wcm:action="add">
+              <Order>3</Order>
+              <Type>Primary</Type>
+              <Extend>true</Extend>
+            </CreatePartition>
+          </CreatePartitions>
+
+          <ModifyPartitions>
+            <!-- EFI Partition: Required for UEFI -->
+            <ModifyPartition wcm:action="add">
+              <Order>1</Order>
+              <PartitionID>1</PartitionID>
+              <Label>System</Label>
+              <Format>FAT32</Format>
+            </ModifyPartition>
+            <!-- MSR: Needed for GPT layout, but unformatted -->
+            <ModifyPartition wcm:action="add">
+              <Order>2</Order>
+              <PartitionID>2</PartitionID>
+            </ModifyPartition>
+            <!-- Windows Partition -->
+            <ModifyPartition wcm:action="add">
+              <Order>3</Order>
+              <PartitionID>3</PartitionID>
+              <Label>Windows</Label>
+              <Format>NTFS</Format>
+              <Letter>C</Letter>
+            </ModifyPartition>
+          </ModifyPartitions>
+        </Disk>
+      </DiskConfiguration>
+
+      <!-- Apply Windows Image to Partition -->
+      <ImageInstall>
+        <OSImage>
+          <InstallTo>
+            <DiskID>0</DiskID>
+            <PartitionID>3</PartitionID>
+          </InstallTo>
+          <WillShowUI>OnError</WillShowUI>
+        </OSImage>
+      </ImageInstall>
+
+      <!-- Basic User Info (Optional Key placeholder) -->
+      <UserData>
+        <ProductKey>
+          <Key></Key>
+          <WillShowUI>Never</WillShowUI>
+        </ProductKey>
+        <AcceptEula>true</AcceptEula>
+        <FullName>Andrei</FullName>
+        <Organization>NotMicrosoft</Organization>
+      </UserData>
+    </component>
+  </settings>
+
+  <!-- ===================== PASS: specialize ===================== -->
+  <settings pass="specialize">
+    <component name="Microsoft-Windows-Shell-Setup" 
+               processorArchitecture="amd64" 
+               publicKeyToken="31bf3856ad364e35" 
+               language="neutral" 
+               versionScope="nonSxS" 
+               xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      <ComputerName>DUKU</ComputerName> <!-- Customize PC name -->
+      <TimeZone>GMT Standard Time</TimeZone>
+      <RegisteredOwner>AndreiEduardSTAN</RegisteredOwner>
+      <RegisteredOrganization>FST</RegisteredOrganization>
+    </component>
+  </settings>
+
+  <!-- ===================== PASS: oobeSystem ===================== -->
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64"
+    publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS"
+    xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      <InputLocale>en-GB</InputLocale>
+      <SystemLocale>en-GB</SystemLocale>
+      <UILanguage>en-GB</UILanguage>
+      <UserLocale>en-GB</UserLocale>
+    </component>
+    
+    <component name="Microsoft-Windows-Shell-Setup" 
+               processorArchitecture="amd64" 
+               publicKeyToken="31bf3856ad364e35" 
+               language="neutral" 
+               versionScope="nonSxS" 
+               xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+      
+      <!-- OOBE Customization -->
+      <OOBE>
+        <HideEULAPage>true</HideEULAPage>
+        <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+        <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+        <SkipMachineOOBE>true</SkipMachineOOBE>
+        <SkipUserOOBE>true</SkipUserOOBE>
+        <NetworkLocation>Work</NetworkLocation>
+        <ProtectYourPC>1</ProtectYourPC>
+      </OOBE>
+
+      <!-- Local Admin Account Creation -->
+      <UserAccounts>
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Name>Admin</Name>
+            <DisplayName>Admin</DisplayName>
+            <Group>Administrators</Group>
+            <Password>
+              <Value>Cowg1rl</Value> <!-- *sigh* okay... -->
+              <PlainText>true</PlainText>
+            </Password>
+          </LocalAccount>
+        </LocalAccounts>
+      </UserAccounts>
+
+      <!-- Autologin Once -->
+      <AutoLogon>
+        <Username>Admin</Username>
+        <Password>
+          <Value>Cowg1rl</Value>
+          <PlainText>true</PlainText>
+        </Password>
+        <Enabled>true</Enabled>
+        <LogonCount>1</LogonCount>
+      </AutoLogon>
+
+      <!-- Redundant but safe timezone + reg info -->
+      <TimeZone>GMT Standard Time</TimeZone>
+      <RegisteredOwner>Andrei</RegisteredOwner>
+      <RegisteredOrganization>FST</RegisteredOrganization>
+    </component>
+  </settings>
+</unattend>

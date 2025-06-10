@@ -156,7 +156,7 @@
             <DisplayName>Admin</DisplayName>
             <Group>Administrators</Group>
             <Password>
-              <Value>Cowg1rl</Value> <!-- *sigh* okay... -->
+              <Value>REDACTED</Value> <!-- *sigh* okay... -->
               <PlainText>true</PlainText>
             </Password>
           </LocalAccount>
@@ -167,7 +167,7 @@
       <AutoLogon>
         <Username>Admin</Username>
         <Password>
-          <Value>Cowg1rl</Value>
+          <Value>REDACTED</Value>
           <PlainText>true</PlainText>
         </Password>
         <Enabled>true</Enabled>
